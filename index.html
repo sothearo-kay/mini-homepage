@@ -7,70 +7,61 @@
     <link href="main.css" rel="stylesheet" />
   </head>
   <body>
-    <header></header>
-
-    <article></article>
-
-    <footer>
-      <nav class="dock">
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-        <button class="dock__button">
-          <div class="dock__icon"></div>
-        </button>
-      </nav>
-    </footer>
-
     <script>
-      const buttons = document.querySelectorAll(".dock__button");
-      const baseSize = 2.5; // Base size in rem
+      document.addEventListener("DOMContentLoaded", () => {
+        const dock = document.querySelector(".dock");
+        const numberOfItems = 6; // Adjust the number of dock items
+        for (let i = 0; i < numberOfItems; i++) {
+          const button = document.createElement("button");
+          button.classList.add("dock__button");
+          const icon = document.createElement("div");
+          icon.classList.add("dock__icon");
+          button.appendChild(icon);
+          dock.appendChild(button);
+        }
 
-      const resetSizes = () => {
-        buttons.forEach((button) => {
-          button.style.transform = "translateY(0)";
-          const icon = button.querySelector(".dock__icon");
-          icon.style.width = `${baseSize}rem`;
-        });
-      };
+        const buttons = document.querySelectorAll(".dock__button");
+        const baseSize = 2.5; // Base size in rem
 
-      const updateDockItems = (activeIndex, e) => {
-        resetSizes();
-
-        const effects = [
-          { index: activeIndex - 1, scale: 1.5, y: -10 },
-          { index: activeIndex, scale: 2, y: -25 },
-          { index: activeIndex + 1, scale: 1.5, y: -10 },
-        ];
-
-        effects.forEach(({ index, scale, y }) => {
-          if (buttons[index]) {
-            const button = buttons[index];
+        const resetSizes = () => {
+          buttons.forEach((button) => {
+            button.style.transform = "translateY(0)";
             const icon = button.querySelector(".dock__icon");
-            const newSize = baseSize * scale;
+            icon.style.width = `${baseSize}rem`;
+          });
+        };
 
-            icon.style.width = `${newSize}rem`;
-            button.style.transform = `translateY(${y}px)`;
-          }
+        const updateDockItems = (activeIndex, e) => {
+          resetSizes();
+
+          const effects = [
+            { index: activeIndex - 1, scale: 1.5, y: -10 },
+            { index: activeIndex, scale: 2, y: -25 },
+            { index: activeIndex + 1, scale: 1.5, y: -10 },
+          ];
+
+          effects.forEach(({ index, scale, y }) => {
+            if (buttons[index]) {
+              const button = buttons[index];
+              const icon = button.querySelector(".dock__icon");
+              const newSize = baseSize * scale;
+              icon.style.width = `${newSize}rem`;
+              button.style.transform = `translateY(${y}px)`;
+            }
+          });
+        };
+
+        buttons.forEach((button, idx) => {
+          button.addEventListener("mouseenter", (e) => updateDockItems(idx, e));
+          button.addEventListener("mouseleave", resetSizes);
         });
-      };
-
-      buttons.forEach((button, idx) => {
-        button.addEventListener("mouseenter", (e) => updateDockItems(idx, e));
-        button.addEventListener("mouseleave", resetSizes);
       });
     </script>
+
+    <header></header>
+    <article></article>
+    <footer>
+      <nav class="dock"></nav>
+    </footer>
   </body>
 </html>
