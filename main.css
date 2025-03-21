@@ -54,5 +54,4 @@ footer {
   border: 1px solid #e4e4e7;
   border-radius: 50%;
   transition: width 0.25s var(--ease-in-out);
-  will-change: width;
 }

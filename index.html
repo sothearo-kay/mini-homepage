@@ -36,7 +36,7 @@
 
           const effects = [
             { index: activeIndex - 1, scale: 1.5, y: -10 },
-            { index: activeIndex, scale: 2, y: -25 },
+            { index: activeIndex, scale: 2, y: -20 },
             { index: activeIndex + 1, scale: 1.5, y: -10 },
           ];
 
@@ -52,7 +52,7 @@
         };
 
         buttons.forEach((button, idx) => {
-          button.addEventListener("mouseenter", (e) => updateDockItems(idx, e));
+          button.addEventListener("mouseover", (e) => updateDockItems(idx, e));
           button.addEventListener("mouseleave", resetSizes);
         });
       });
