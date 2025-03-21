@@ -5,63 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>homepage</title>
     <link href="main.css" rel="stylesheet" />
-  </head>
-  <body>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const dock = document.querySelector(".dock");
-        const numberOfItems = 6; // Adjust the number of dock items
-        for (let i = 0; i < numberOfItems; i++) {
-          const button = document.createElement("button");
-          button.classList.add("dock__button");
-          const icon = document.createElement("div");
-          icon.classList.add("dock__icon");
-          button.appendChild(icon);
-          dock.appendChild(button);
-        }
+        const icons = ["home", "search", "settings", "user", "mail", "star"];
 
-        const buttons = document.querySelectorAll(".dock__button");
+        icons.forEach((iconName) => {
+          const li = document.createElement("li");
+          li.className = "dock__item";
+          li.innerHTML = `
+            <button class="dock__button" aria-label="${iconName}">
+              <i class="dock__icon" data-lucide="${iconName}"></i>
+            </button>
+          `;
+          dock.appendChild(li);
+        });
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        const items = document.querySelectorAll(".dock__item");
         const baseSize = 2.5; // Base size in rem
 
-        const resetSizes = () => {
-          buttons.forEach((button) => {
-            button.style.transform = "translateY(0)";
-            const icon = button.querySelector(".dock__icon");
-            icon.style.width = `${baseSize}rem`;
+        const resetScales = () => {
+          items.forEach((item) => {
+            item.style.transform = "translateY(0)";
+            const button = item.querySelector(".dock__button");
+            const icon = item.querySelector(".dock__icon");
+            button.style.width = `${baseSize}rem`;
+            icon.style.transform = `scale(1)`;
           });
         };
 
-        const updateDockItems = (activeIndex, e) => {
-          resetSizes();
+        const updateDockItems = (activeIndex) => {
+          resetScales();
 
-          const effects = [
-            { index: activeIndex - 1, scale: 1.5, y: -10 },
-            { index: activeIndex, scale: 2, y: -20 },
-            { index: activeIndex + 1, scale: 1.5, y: -10 },
-          ];
+          items.forEach((item, index) => {
+            const distance = Math.abs(index - activeIndex);
+            const button = item.querySelector(".dock__button");
+            const icon = item.querySelector(".dock__icon");
 
-          effects.forEach(({ index, scale, y }) => {
-            if (buttons[index]) {
-              const button = buttons[index];
-              const icon = button.querySelector(".dock__icon");
-              const newSize = baseSize * scale;
-              icon.style.width = `${newSize}rem`;
-              button.style.transform = `translateY(${y}px)`;
+            if (distance === 0) {
+              // Hovered item
+              item.style.transform = "translateY(-15px)";
+              button.style.width = `${1.75 * baseSize}rem`;
+              icon.style.transform = `scale(1.5)`;
+            } else if (distance === 1) {
+              // Adjacent items
+              item.style.transform = "translateY(-8px)";
+              button.style.width = `${1.5 * baseSize}rem`;
+              icon.style.transform = `scale(1.25)`;
             }
           });
         };
 
-        buttons.forEach((button, idx) => {
-          button.addEventListener("mouseover", (e) => updateDockItems(idx, e));
-          button.addEventListener("mouseleave", resetSizes);
+        items.forEach((item, idx) => {
+          item.addEventListener("mouseover", (e) => updateDockItems(idx, e));
+          item.addEventListener("mouseleave", resetScales);
         });
       });
     </script>
+  </head>
 
+  <body>
     <header></header>
     <article></article>
     <footer>
-      <nav class="dock"></nav>
+      <nav>
+        <ul class="dock"></ul>
+      </nav>
     </footer>
   </body>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
 </html>
